@@ -7,10 +7,10 @@ class Line2 extends Component {
             width: this.props.width,
             height: this.props.height,
             enabled: "disabled",
-            xs1:null,
-            ys1:null,
-            xs2:null,
-            ys2:null,
+            xs1:"",
+            ys1:"",
+            xs2:"",
+            ys2:"",
 
         }
         this.lineX1Update = this.lineX1Update.bind(this);
@@ -69,7 +69,11 @@ class Line2 extends Component {
             return {
                
                 height: props.height,
-                width: props.width
+                width: props.width,
+                xs1:"",
+                ys1:"",
+                xs2:"",
+                ys2:"",
             }
         }
         return null
@@ -81,10 +85,10 @@ class Line2 extends Component {
                 <div className="inputsForGenerateField">
                     <p>L</p>
                   
-                    <input onChange={this.lineX1Update} type="number" placeholder="x1" disabled={(this.state.width && this.state.height > 0) ? "" : this.state.enabled} />
-                    <input onChange={this.lineY1Update} type="number" placeholder="y1" disabled={(this.state.width && this.state.height > 0) ? "" : this.state.enabled} />
-                    <input onChange={this.lineX2Update} type="number" placeholder="x2" disabled={(this.state.width && this.state.height > 0) ? "" : this.state.enabled} />
-                    <input onChange={this.lineY2Update} type="number" placeholder="y2" disabled={(this.state.width && this.state.height > 0) ? "" : this.state.enabled} />
+                    <input onChange={this.lineX1Update} type="number" placeholder="x1" disabled={(this.state.width && this.state.height > 0) ? "" : this.state.enabled}  value={this.state.xs1} />
+                    <input onChange={this.lineY1Update} type="number" placeholder="y1" disabled={(this.state.width && this.state.height > 0) ? "" : this.state.enabled}  value={this.state.ys1} />
+                    <input onChange={this.lineX2Update} type="number" placeholder="x2" disabled={(this.state.width && this.state.height > 0) ? "" : this.state.enabled}  value={this.state.xs2} />
+                    <input onChange={this.lineY2Update} type="number" placeholder="y2" disabled={(this.state.width && this.state.height > 0) ? "" : this.state.enabled}   value={this.state.ys2}/>
                 </div>
             </div>
         )

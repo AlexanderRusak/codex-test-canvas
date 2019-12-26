@@ -52,7 +52,9 @@ class Fill extends Component {
             return {
 
                 height: props.height,
-                width: props.width
+                width: props.width,
+                FillY:"",
+                FillX:"",
             }
         }
         return null
@@ -61,9 +63,9 @@ class Fill extends Component {
         return (
             <div className="inputsForGenerateField">
                 <p>B</p>
-                <input onChange={this.fillXUpdate} type="number" placeholder="x" disabled={(this.state.width && this.state.height > 0) ? "" : this.state.enabled} />
-                <input onChange={this.fillYUpdate} type="number" placeholder="y" disabled={(this.state.width && this.state.height > 0) ? "" : this.state.enabled} />
-                <input onChange={this.fillSymbolUpdate} type="text" placeholder="C" disabled={(this.state.width && this.state.height > 0) ? "" : this.state.enabled} />
+                <input onChange={this.fillXUpdate} type="number" placeholder="x" disabled={(this.state.width && this.state.height > 0) ? "" : this.state.enabled} value={this.state.FillX} />
+                <input onChange={this.fillYUpdate} type="number" placeholder="y" disabled={(this.state.width && this.state.height > 0) ? "" : this.state.enabled} value={this.state.FillY} />
+                <input onChange={this.fillSymbolUpdate} maxLength="1" type="text" placeholder="C" disabled={(this.state.width && this.state.height > 0) ? "" : this.state.enabled} />
             </div>
         )
     }

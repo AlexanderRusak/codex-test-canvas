@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-function drawField(width, height, lineFirstX1, lineFirstY1, lineFirstX2, lineFirstY2, lineSecondX1, lineSecondY1, lineSecondX2, lineSecondY2, rectangleX1, rectangleY1, rectangleX2, rectangleY2, fillX, fillY, fillSymbol) {
-    let field = Array.from(generateCanvas(width, height, lineFirstX1, lineFirstY1, lineFirstX2, lineFirstY2, lineSecondX1, lineSecondY1, lineSecondX2, lineSecondY2, rectangleX1, rectangleY1, rectangleX2, rectangleY2, fillX, fillY, fillSymbol));
+function drawField(width, height, defaultSymbol, lineFirstX1, lineFirstY1, lineFirstX2, lineFirstY2, lineSecondX1, lineSecondY1, lineSecondX2, lineSecondY2, rectangleX1, rectangleY1, rectangleX2, rectangleY2, fillX, fillY, fillSymbol) {
+    let field = Array.from(generateCanvas(width, height, defaultSymbol, lineFirstX1, lineFirstY1, lineFirstX2, lineFirstY2, lineSecondX1, lineSecondY1, lineSecondX2, lineSecondY2, rectangleX1, rectangleY1, rectangleX2, rectangleY2, fillX, fillY, fillSymbol));
     let canvasField = [];
     canvasField = field.map((item) =>
         item.map(el => <i>{el}</i>)
@@ -10,49 +10,859 @@ function drawField(width, height, lineFirstX1, lineFirstY1, lineFirstX2, lineFir
     return field;
 }
 
-function generateCanvas(widthCanvas, heightCanvas, lfx1, lfy1, lfx2, lfy2, lsx1, lsy1, lsx2, lsy2, rx1, ry1, rx2, ry2, fx, fy, fs) {
+function generateCanvas(widthCanvas, heightCanvas, defSymb, lfx1, lfy1, lfx2, lfy2, lsx1, lsy1, lsx2, lsy2, rx1, ry1, rx2, ry2, fx, fy, fs) {
     let fieldArray = new Array(heightCanvas);
+
     for (let height = 0; height < heightCanvas; height++) {
         fieldArray[height] = new Array(widthCanvas);
         for (let width = 0; width < widthCanvas; width++) {
             fieldArray[height][width] = "";
         }
     }
-    (rx2 && ry2 && rx1 && ry1 !== " ") ? rectangle(rx1, ry1, rx2, ry2, fieldArray) : console.log(rx1, ry1, rx2, ry2, "test");
-    (lfx2 && lfy2 && lfx1 && lfy1 !== " ") ? ((lfy1 == lfy2) ?
-        horizontalLine(lfx1, lfy1, lfx2, lfy2, fieldArray) :
-        verticalLine(lfx1, lfy1, lfx2, lfy2, fieldArray))
+    //fx, fy, fs
+    if (widthCanvas < lfx1 ||
+        widthCanvas < lfx2 ||
+        widthCanvas < lsx1 ||
+        widthCanvas < lsx2 ||
+        widthCanvas < rx1 ||
+        widthCanvas < rx2 ||
+        widthCanvas < fx ||
+        widthCanvas < fy) {
+        lfx1 = widthCanvas;
+        lfx2 = widthCanvas;
+        lsx1 = widthCanvas;
+        lsx2 = widthCanvas;
+        rx1 = widthCanvas;
+        rx2 = widthCanvas;
+        fx = widthCanvas;
+        fy = widthCanvas;
+    }
+    if (heightCanvas < lfy1 ||
+        heightCanvas < lfy2 ||
+        heightCanvas < lsy1 ||
+        heightCanvas < lsy2 ||
+        heightCanvas < ry1 ||
+        heightCanvas < ry2 ||
+        heightCanvas < fx ||
+        heightCanvas < fy) {
+        lfy1 = heightCanvas;
+        lfy2 = heightCanvas;
+        lsy1 = heightCanvas;
+        lsy2 = heightCanvas;
+        ry1 = heightCanvas;
+        ry2 = heightCanvas;
+        fx = heightCanvas;
+        fy = heightCanvas;
+    }
+    (rx2 && ry2 && rx1 && ry1 !== " ") ? rectangle(rx1, ry1, rx2, ry2, fieldArray, defSymb) : console.log(rx1, ry1, rx2, ry2, "test");
+    (lfx2 && lfy2 && lfx1 && lfy1 !== " ") ? ((lfy1 === lfy2) ?
+        horizontalLine(lfx1, lfy1, lfx2, lfy2, fieldArray, defSymb) :
+        verticalLine(lfx1, lfy1, lfx2, lfy2, fieldArray, defSymb))
         : console.log(lfx1, lfy1, lfx2, lfy2, "test");
-    (lsx2 && lsy2 && lsx1 && lsy1 !== " ") ? ((lsy1 == lsy2) ?
-        horizontalLine(lsx1, lsy1, lsx2, lsy2, fieldArray) :
-        verticalLine(lsx1, lsy1, lsx2, lsy2, fieldArray))
+    (lsx2 && lsy2 && lsx1 && lsy1 !== " ") ? ((lsy1 === lsy2) ?
+        horizontalLine(lsx1, lsy1, lsx2, lsy2, fieldArray, defSymb) :
+        verticalLine(lsx1, lsy1, lsx2, lsy2, fieldArray, defSymb))
         : console.log(lsx1, lsy1, lsx2, lsy2, "test");
-    bucketFill(fx, fy, fs, fieldArray);
+    (fx && fy !== "" ) ? bucketFill(fx, fy, fs, fieldArray, defSymb, heightCanvas, widthCanvas) : console.log("error")
     return fieldArray;
 }
-function bucketFill(fx, fy, fs, arr) {
 
-    console.log(fx, fy, fs);
+
+
+///ATTENTION !!!!!!!!!!!!!!!!!!!! DONT'T SHOW BUCKETFILL FUNCTION
+function bucketFill(fx, fy, fs, arr, ds, wc, hc) {
+    fx = fx - 1;
+    fy = fy - 1;
+    if (arr[fy][fx] !== ds) {
+
+        for (let i = fy; i < wc; i++) {
+            if (arr[i][fx] !== ds) {
+                for (let j = fx; j < hc; j++) {
+                    if (arr[i][j] !== ds) {
+
+                        for (let k = i; k < wc; k++) {
+                            if (arr[k][j] !== ds) {
+
+                                for (let m = j; m < hc; m++) {
+                                    if (arr[k][m] !== ds) {
+
+                                        for (let n = k; n < wc; n++) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                        for (let n = k; n >= 0; n--) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                                for (let m = j; m >= 0; m--) {
+                                    if (arr[k][m] !== ds) {
+                                        for (let n = k; n < wc; n++) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                        for (let n = k; n >= 0; n--) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                            }
+                            else {
+                                break;
+                            }
+                        }
+                        for (let k = i; k >= 0; k--) {
+                            if (arr[k][j] !== ds) {
+                                for (let m = j; m < hc; m++) {
+                                    if (arr[k][m] !== ds) {
+                                        for (let n = k; n < wc; n++) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                        for (let n = k; n >= 0; n--) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                                for (let m = j; m >= 0; m--) {
+                                    if (arr[k][m] !== ds) {
+                                        for (let n = k; n < wc; n++) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                        for (let n = k; n >= 0; n--) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+
+                            }
+                            else {
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        break;
+                    }
+                }
+            }
+            else {
+                break;
+            }
+        }
+
+        /////
+        for (let i = fy; i < wc; i++) {
+            if (arr[i][fx] !== ds) {
+                for (let j = fx; j >= 0; j--) {
+                    if (arr[i][j] !== ds) {
+                        for (let k = i; k < wc; k++) {
+                            if (arr[k][j] !== ds) {
+                                for (let m = j; m < hc; m++) {
+                                    if (arr[k][m] !== ds) {
+                                        for (let n = k; n < wc; n++) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                        for (let n = k; n >= 0; n--) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                                for (let m = j; m >= 0; m--) {
+                                    if (arr[k][m] !== ds) {
+                                        for (let n = k; n < wc; n++) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                        for (let n = k; n >= 0; n--) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                            }
+                            else {
+                                break;
+                            }
+
+                        }
+                        for (let k = i; k >= 0; k--) {
+                            if (arr[k][j] !== ds) {
+                                for (let m = j; m < hc; m++) {
+                                    if (arr[k][m] !== ds) {
+                                        for (let n = k; n < wc; n++) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                        for (let n = k; n >= 0; n--) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                                for (let m = j; m >= 0; m--) {
+                                    if (arr[k][m] !== ds) {
+                                        for (let n = k; n < wc; n++) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                        for (let n = k; n >= 0; n--) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                            }
+                            else {
+                                break;
+                            }
+
+                        }
+                    }
+                    else {
+                        break;
+                    }
+                }
+            }
+            else {
+                break;
+            }
+        }
+        ////////////////////
+        for (let i = fy; i >= 0; i--) {
+            if (arr[i][fx] !== ds) {
+                for (let j = fx; j < hc; j++) {
+                    if (arr[i][j] !== ds) {
+                        for (let k = i; k < hc; k++) {
+                            if (arr[k][j] !== ds) {
+                                for (let m = j; m < hc; m++) {
+                                    if (arr[k][m] !== ds) {
+                                        for (let n = k; n < wc; n++) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                        for (let n = k; n >= 0; n--) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                                for (let m = j; m >= 0; m--) {
+                                    if (arr[k][m] !== ds) {
+                                        for (let m = j; m < hc; m++) {
+                                            if (arr[k][m] !== ds) {
+                                                for (let n = k; n < wc; n++) {
+                                                    if (arr[n][m] !== ds) {
+                                                        arr[n][m] = fs;
+                                                    }
+                                                    else {
+                                                        break;
+                                                    }
+                                                }
+                                                for (let n = k; n >= 0; n--) {
+                                                    if (arr[n][m] !== ds) {
+                                                        arr[n][m] = fs;
+                                                    }
+                                                    else {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                        for (let m = j; m >= 0; m--) {
+                                            if (arr[k][m] !== ds) {
+                                                for (let n = k; n < wc; n++) {
+                                                    if (arr[n][m] !== ds) {
+                                                        arr[n][m] = fs;
+                                                    }
+                                                    else {
+                                                        break;
+                                                    }
+                                                }
+                                                for (let n = k; n >= 0; n--) {
+                                                    if (arr[n][m] !== ds) {
+                                                        arr[n][m] = fs;
+                                                    }
+                                                    else {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                            }
+                            else {
+                                break;
+                            }
+                        }
+                        for (let k = i; k >= 0; k--) {
+                            if (arr[k][j] !== ds) {
+                                for (let m = j; m < hc; m++) {
+                                    if (arr[k][m] !== ds) {
+                                        for (let n = k; n < wc; n++) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                        for (let n = k; n >= 0; n--) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                                for (let m = j; m >= 0; m--) {
+                                    if (arr[k][m] !== ds) {
+                                        for (let n = k; n < wc; n++) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                        for (let n = k; n >= 0; n--) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                            }
+                            else {
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        break;
+                    }
+                }
+            }
+            else {
+                break;
+            }
+        }
+        for (let i = fy; i >= 0; i--) {
+            if (arr[i][fx] !== ds) {
+                for (let j = fx; j >= 0; j--) {
+                    if (arr[i][j] !== ds) {
+                        for (let k = i; k < wc; k++) {
+                            if (arr[k][j] !== ds) {
+                                for (let m = j; m < hc; m++) {
+                                    if (arr[k][m] !== ds) {
+                                        for (let n = k; n < wc; n++) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                        for (let n = k; n >= 0; n--) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                                for (let m = j; m >= 0; m--) {
+                                    if (arr[k][m] !== ds) {
+                                        for (let n = k; n < wc; n++) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                        for (let n = k; n >= 0; n--) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                            }
+                            else {
+                                break;
+                            }
+                        }
+                        for (let k = i; k >= 0; k--) {
+                            if (arr[k][j] !== ds) {
+                                for (let m = j; m < hc; m++) {
+                                    if (arr[k][m] !== ds) {
+                                        for (let n = k; n < wc; n++) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                        for (let n = k; n >= 0; n--) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                                for (let m = j; m >= 0; m--) {
+                                    if (arr[k][m] !== ds) {
+                                        for (let n = k; n < wc; n++) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                        for (let n = k; n >= 0; n--) {
+                                            if (arr[n][m] !== ds) {
+                                                arr[n][m] = fs;
+                                            }
+                                            else {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                            }
+                            else {
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        break;
+                    }
+                }
+            }
+            else {
+                break;
+            }
+        }
+    }
+
+
+
+
+
+
+    ////////////////////////////////////////////////////////////////
+
+
+
+    else {
+
+
+        for (let i = fy; i < wc; i++) {
+            if (arr[i][fx] === ds | arr[i][fx] === fs) {
+                for (let j = fx; j < hc; j++) {
+                    if (arr[i][j] === ds || arr[i][j] === fs) {
+                        for (let k = i; k < wc; k++) {
+                            if (arr[k][j] === ds || arr[k][j] === fs) {
+                                for (let m = j; m < hc; m++) {
+                                    if (arr[k][m] === ds || arr[k][m] === fs) {
+                                        arr[k][m] = fs;
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                                for (let m = j; m >= 0; m--) {
+                                    if (arr[k][m] === ds || arr[k][m] === fs) {
+                                        arr[k][m] = fs;
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                            }
+                            else {
+                                break;
+                            }
+                        }
+                        for (let k = i; k >= 0; k--) {
+                            if (arr[k][j] === ds || arr[k][j] === fs) {
+                                for (let m = j; m < hc; m++) {
+                                    if (arr[k][m] === ds || arr[k][m] === fs) {
+                                        arr[k][m] = fs;
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                                for (let m = j; m >= 0; m--) {
+                                    if (arr[k][m] === ds || arr[k][m] === fs) {
+                                        arr[k][m] = fs;
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                            }
+                            else {
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        break;
+                    }
+                }
+
+                for (let j = fx; j >= 0; j--) {
+                    console.log("test")
+                    if (arr[i][j] === ds || arr[i][j] === fs) {
+                        for (let k = i; k < wc; k++) {
+                            if (arr[k][j] === ds || arr[k][j] === fs) {
+                                for (let m = j; m < hc; m++) {
+                                    if (arr[k][m] === ds || arr[k][m] === fs) {
+                                        arr[k][m] = fs;
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                                for (let m = j; m >= 0; m--) {
+                                    if (arr[k][m] === ds || arr[k][m] === fs) {
+                                        arr[k][m] = fs;
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                            }
+                            else {
+                                break;
+                            }
+                        }
+                        for (let k = i; k >= 0; k--) {
+                            if (arr[k][j] === ds || arr[k][j] === fs) {
+                                for (let m = j; m < wc; m++) {
+                                    if (arr[k][m] === ds || arr[k][m] === fs) {
+                                        arr[k][m] = fs;
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                                for (let m = j; m >= 0; m--) {
+                                    if (arr[k][m] === ds || arr[k][m] === fs) {
+                                        arr[k][m] = fs;
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                            }
+                            else {
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        break;
+                    }
+                }
+            }
+        }
+        for (let i = fy; i >= 0; i--) {
+
+            if (arr[i][fx] === ds || arr[i][fx] === fs) {
+                for (let j = fx; j < hc; j++) {
+                    if (arr[i][j] === ds || arr[i][j] === fs) {
+                        for (let k = i; k < wc; k++) {
+                            if (arr[k][j] === ds || arr[k][j] === fs) {
+                                for (let m = j; m < hc; m++) {
+                                    if (arr[k][m] === ds || arr[k][m] === fs) {
+                                        arr[k][m] = fs;
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                                for (let m = j; m >= 0; m--) {
+                                    if (arr[k][m] === ds || arr[k][m] === fs) {
+                                        arr[k][m] = fs;
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                            }
+                            else {
+                                break;
+                            }
+                        }
+                        for (let k = i; k >= 0; k--) {
+                            if (arr[k][j] === ds || arr[k][j] === fs) {
+                                for (let m = j; m < hc; m++) {
+                                    if (arr[k][m] === ds || arr[k][m] === fs) {
+                                        arr[k][m] = fs;
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                                for (let m = j; m >= 0; m--) {
+                                    if (arr[k][m] === ds || arr[k][m] === fs) {
+                                        arr[k][m] = fs;
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                            }
+                            else {
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        break;
+                    }
+                }
+                for (let j = fx; j >= 0; j--) {
+                    if (arr[i][j] === ds || arr[i][j] === fs) {
+                        for (let k = i; k < wc; k++) {
+                            if (arr[k][j] === ds || arr[k][j] === fs) {
+                                for (let m = j; m < hc; m++) {
+                                    if (arr[k][m] === ds || arr[k][m] === fs) {
+                                        arr[k][m] = fs;
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                                for (let m = j; m >= 0; m--) {
+                                    if (arr[k][m] === ds || arr[k][m] === fs) {
+                                        arr[k][m] = fs;
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                            }
+                            else {
+                                break;
+                            }
+                        }
+                        for (let k = i; k >= 0; k--) {
+                            if (arr[k][j] === ds || arr[k][j] === fs) {
+                                for (let m = j; m < hc; m++) {
+                                    if (arr[k][m] === ds || arr[k][m] === fs) {
+                                        arr[k][m] = fs;
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                                for (let m = j; m >= 0; m--) {
+                                    if (arr[k][m] === ds || arr[k][m] === fs) {
+                                        arr[k][m] = fs;
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                            }
+                            else {
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        break;
+                    }
+
+                }
+
+            }
+
+        }
+
+
+
+
+        /////
+
+    }
 
 
 }
-function verticalLine(x1, y1, x2, y2, arr) {
+///ATTENTION !!!!!!!!!!!!!!!!!!!! DONT'T SHOW BUCKETFILL FUNCTION
+function verticalLine(x1, y1, x2, y2, arr, ds) {
     x1 = x1 - 1;
     x2 = x2 - 1;
     y1 = y1 - 1;
     y2 = y2 - 1;
-    console.log(x1, y1, x2, y2, "bug");
-    arr[y2][x2] = "X";
-    arr[y1][x1] = "X";
-    if (x1 == x2) {
+    if (x1 === x2) {
         if (y2 > y1) {
-            for (let i = y1; i < y2; i++) {
-                arr[i][x1] = "X";
+            for (let i = y1; i <= y2; i++) {
+                arr[i][x1] = ds;
             }
         }
         if (y1 > y2) {
             for (let i = y1; i >= y2; i--) {
-                arr[i][x1] = "X";
+                arr[i][x1] = ds;
             }
         }
 
@@ -61,30 +871,28 @@ function verticalLine(x1, y1, x2, y2, arr) {
 
 
 }
-function horizontalLine(x1, y1, x2, y2, arr) {
+function horizontalLine(x1, y1, x2, y2, arr, ds) {
     x1 = x1 - 1;
     x2 = x2 - 1;
     y1 = y1 - 1;
     y2 = y2 - 1;
-    arr[y2][x2] = "X";
-    arr[y1][x1] = "X";
-    console.log(x1, y1, x2, y2, "bug");
-    if (y1 == y2) {
+
+    if (y1 === y2) {
         if (x2 > x1) {
             for (let i = x1; i <= x2; i++) {
-                arr[y2][i] = "X";
+                arr[y2][i] = ds;
             }
         }
         if (x1 > x2) {
             for (let i = x1; i >= x2; i--) {
-                arr[y2][i] = "X";
+                arr[y2][i] = ds;
             }
         }
 
     }
 
 }
-function rectangle(x1, y1, x2, y2, arr) {
+function rectangle(x1, y1, x2, y2, arr, ds) {
     x1 = x1 - 1;
     x2 = x2 - 1;
     y1 = y1 - 1;
@@ -92,59 +900,58 @@ function rectangle(x1, y1, x2, y2, arr) {
     if (x2 > x1 && y2 > y1) {
 
         for (let i = x1; i <= x2; i++) {
-            arr[i][y1] = "X";
-            console.log("work");
+            arr[y1][i] = ds;
         }
         for (let i = y1; i <= y2; i++) {
-            arr[x1][i] = "X";
+            arr[i][x1] = ds;
         }
         for (let i = x2; i >= x1; i--) {
-            arr[i][y2] = "X";
+            arr[y2][i] = ds;
         }
         for (let i = y2; i >= y1; i--) {
-            arr[x2][i] = "X"
+            arr[i][x2] = ds;
         }
     }
     if (x1 > x2 && y2 > y1) {
         for (let i = x1; i >= x2; i--) {
-            arr[i][y1] = "X";
+            arr[y1][i] = ds;
         }
         for (let i = y1; i <= y2; i++) {
-            arr[x1][i] = "X";
+            arr[i][x1] = ds;
         }
         for (let i = x2; i <= x1; i++) {
-            arr[i][y2] = "X";
+            arr[y2][i] = ds;
         }
         for (let i = y2; i >= y1; i--) {
-            arr[x2][i] = "X"
+            arr[i][x2] = ds;
         }
     }
     if (x1 > x2 && y1 > y2) {
         for (let i = x1; i >= x2; i--) {
-            arr[i][y1] = "X";
+            arr[y1][i] = ds;
         }
         for (let i = y1; i >= y2; i--) {
-            arr[x1][i] = "X";
+            arr[i][x1] = ds;
         }
         for (let i = x2; i <= x1; i++) {
-            arr[i][y2] = "X";
+            arr[y2][i] = ds;
         }
         for (let i = y2; i <= y1; i++) {
-            arr[x2][i] = "X"
+            arr[i][x2] = ds;
         }
     }
     if (x2 > x1 && y1 > y2) {
         for (let i = x2; i >= x1; i--) {
-            arr[i][y2] = "X";
+            arr[y2][i] = ds;
         }
         for (let i = y2; i <= y1; i++) {
-            arr[x2][i] = "X"
+            arr[i][x2] = ds;
         }
         for (let i = y1; i >= y2; i--) {
-            arr[x1][i] = "X";
+            arr[i][x1] = ds;
         }
         for (let i = x1; i <= x2; i++) {
-            arr[i][y1] = "X";
+            arr[y1][i] = ds;
         }
     }
 }
@@ -166,6 +973,8 @@ class Canvas extends Component {
         this.state = {
             width: +this.props.width,
             height: +this.props.height,
+            defaultSymbol: "X",
+
             lineFirstX1: this.props.lineFirstX1,
             lineFirstY1: this.props.lineFirstY1,
             lineFirstX2: this.props.lineFirstX2,
@@ -238,6 +1047,7 @@ class Canvas extends Component {
         }
         return null
     }
+
     render() {
 
 
@@ -245,7 +1055,7 @@ class Canvas extends Component {
         return (
             <div>
                 {DrawHorizontalEdge(this.state.width)}
-                {drawField(this.state.width, this.state.height,
+                {drawField(this.state.width, this.state.height, this.state.defaultSymbol,
                     this.state.lineFirstX1,
                     this.state.lineFirstY1,
                     this.state.lineFirstX2,

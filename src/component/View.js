@@ -30,9 +30,9 @@ class View extends Component {
             rectangleY1: "",
             rectangleX2: "",
             rectangleY2: "",
-            fillX:"",
-            fillY:"",
-            fillSymbol:" ",
+            fillX: "",
+            fillY: "",
+            fillSymbol: " ",
 
         }
         this.generate = this.generate.bind(this);
@@ -47,10 +47,10 @@ class View extends Component {
             (this.setState({ canvas: false }))
     }
     canvasWidthUpdate(width) {
+
         this.setState({ width: width.target.value }, () => {
             if ((this.state.width && this.state.height) > 0) {
-                this.setState({ enabled: "" })
-
+                this.setState({ enabled: "" });
             }
             else {
                 this.setState({ enabled: "disabled" })
@@ -61,9 +61,11 @@ class View extends Component {
 
 
     canvasHeightUpdate(height) {
+
         this.setState({ height: height.target.value }, () => {
             if ((this.state.width && this.state.height) > 0) {
-                this.setState({ enabled: "" })
+                this.setState({ enabled: "" });
+                
             }
             else {
                 this.setState({ enabled: "disabled" })
@@ -114,14 +116,14 @@ class View extends Component {
     }
     ////////
 
-    updateFillStateX=(value)=>{
-        this.setState({fillX:value})
+    updateFillStateX = (value) => {
+        this.setState({ fillX: value })
     }
-    updateFillStateY=(value)=>{
-        this.setState({fillY:value})
+    updateFillStateY = (value) => {
+        this.setState({ fillY: value })
     }
-    updateFillSymbol=(value)=>{
-        this.setState({fillSymbol:value})
+    updateFillSymbol = (value) => {
+        this.setState({ fillSymbol: value })
     }
     render() {
         return (
@@ -167,12 +169,13 @@ class View extends Component {
                 />
 
 
-                <input onClick={this.generate} type="button" value="Go!" disabled={this.state.enabled} />
-                {this.state.canvas ?
+           {/*   <input onClick={this.generate} type="button" value="Go!" disabled={this.state.enabled} /> */}
+                {((this.state.width&&this.state.height)&&(this.state.width&&this.state.height!==0)) ?
                     <div>
-                        {console.log(this.state.fillSymbol,this.state.fillX,this.state.fillY)}
-                        <Canvas
                         
+                        {console.log(this.state.fillSymbol, this.state.fillX, this.state.fillY)}
+                        <Canvas
+
                             width={+this.state.width}
                             height={+this.state.height}
                             lineFirstX1={this.state.lineFirstX1}
@@ -191,8 +194,7 @@ class View extends Component {
                             fillY={this.state.fillY}
                             fillSymbol={this.state.fillSymbol}
                         />
-                        <h1>{this.state.rectangleX1},{this.state.rectangleY1},{this.state.rectangleX2},{this.state.rectangleY2}</h1>
-                        <h1></h1>
+                        
                     </div>
                     :
                     <div></div>}

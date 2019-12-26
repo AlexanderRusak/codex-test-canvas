@@ -65,7 +65,11 @@ class Rectangle extends Component {
             return {
               
                 height: props.height,
-                width: props.width
+                width: props.width,
+                x1:"",
+                x2:"",
+                y1:"",
+                y2:"",
             }
         }
         return null
@@ -74,10 +78,10 @@ class Rectangle extends Component {
         return (
             <div className="inputsForGenerateField">
                 <p>R</p>
-                <input onChange={this.rectangleX1Update} type="number" placeholder="x1" disabled={(this.state.width && this.state.height > 0) ? "" : this.state.enabled} />
-                <input onChange={this.rectangleY1Update} type="number" placeholder="y1" disabled={(this.state.width && this.state.height > 0) ? "" : this.state.enabled} />
-                <input onChange={this.rectangleX2Update} type="number" placeholder="x2" disabled={(this.state.width && this.state.height > 0) ? "" : this.state.enabled} />
-                <input onChange={this.rectangleY2Update} type="number" placeholder="y2"disabled={(this.state.width && this.state.height > 0) ? "" : this.state.enabled} />
+                <input onChange={this.rectangleX1Update} type="number" placeholder="x1" disabled={(this.state.width && this.state.height > 0) ? "" : this.state.enabled} value={this.state.x1} />
+                <input onChange={this.rectangleY1Update} type="number" placeholder="y1" disabled={(this.state.width && this.state.height > 0) ? "" : this.state.enabled} value={this.state.y1} />
+                <input onChange={this.rectangleX2Update} type="number" placeholder="x2" disabled={(this.state.width && this.state.height > 0) ? "" : this.state.enabled} value={this.state.x2} />
+                <input onChange={this.rectangleY2Update} type="number" placeholder="y2"disabled={(this.state.width && this.state.height > 0) ? "" : this.state.enabled} value={this.state.y2} />
             </div>
         )
     }
